@@ -1,0 +1,14 @@
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/bin/Debug/net8.0/Tube_Planner
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/bin/Debug/net8.0/Tube_Planner.deps.json
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/bin/Debug/net8.0/Tube_Planner.runtimeconfig.json
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/bin/Debug/net8.0/Tube_Planner.dll
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/bin/Debug/net8.0/Tube_Planner.pdb
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.GeneratedMSBuildEditorConfig.editorconfig
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.AssemblyInfoInputs.cache
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.AssemblyInfo.cs
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.csproj.CoreCompileInputs.cache
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.dll
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/refint/Tube_Planner.dll
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.pdb
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/Tube_Planner.genruntimeconfig.cache
+/Users/alancgregg/Desktop/elliots_stuff/progamin/prograhms/Tube_Planner/obj/Debug/net8.0/ref/Tube_Planner.dll
