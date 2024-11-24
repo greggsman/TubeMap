@@ -1,9 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Specialized;
+using System.Linq.Expressions;
 
 class TubeMap { // adjacency list graph
     private Dictionary<string, List<string>> LinesAndStations = new Dictionary<string, List<string>>();
     public List<string> stations = new List<string>();
-    private bool[,] adjacencyMatrix;
+    private string[,] adjacencyMatrix;
     public TubeMap() {
         LinesAndStations.Add("Northern line via charring cross", 
             new List<string>() {"Euston", "Warren Street", "Goodge Street", "Tottenham Court Road", "Leicester Square"});
@@ -29,10 +30,15 @@ class TubeMap { // adjacency list graph
                 }
             }
         }
-        adjacencyMatrix = new bool[stations.Count, stations.Count];
+        adjacencyMatrix = new string[stations.Count, stations.Count];
+        for(int i = 0; i < stations.Count; i++){ // default empty value
+            for(int j = 0; j < stations.Count; j++){
+                adjacencyMatrix[i, j] = "";
+            }
+        }
         foreach(KeyValuePair<string, List<string>> kvp in LinesAndStations){
             for(int i = 0; i < kvp.Value.Count - 1; i++){
-                SetConnection(kvp.Value[i], kvp.Value[i + 1]);
+                SetConnection(kvp.Value[i], kvp.Value[i + 1], kvp.Key);
             }
         }
     }
@@ -53,23 +59,23 @@ class TubeMap { // adjacency list graph
         }
         return -1;
     }
-    private void SetConnection(string station1, string station2){
+    private void SetConnection(string station1, string station2, string line){
         try{
             int station1Index = GetNodeIndex(station1);
             int station2Index = GetNodeIndex(station2);
-            adjacencyMatrix[station1Index, station2Index] = true;
-            adjacencyMatrix[station2Index, station1Index] = true;
+            adjacencyMatrix[station1Index, station2Index] = line;
+            adjacencyMatrix[station2Index, station1Index] = line;
         }
         catch{
             Console.WriteLine("Station doesn't exist");
         }
     }
-    public bool GetConnection(string station1, string station2){
+    public string GetConnection(string station1, string station2){
         try{
             return adjacencyMatrix[GetNodeIndex(station1), GetNodeIndex(station2)];
         }
         catch{
-            return false;
+            return "";
         }
     }
 
@@ -115,14 +121,27 @@ class TubeMap { // adjacency list graph
             }
             nodeToVisit = stations[shortestDistanceIndex];
         }
-        Console.WriteLine("To get from {0} to {1}:\n{2}", start, destination, DetermineShortestPath(start, destination));
+        string shortestPath = DetermineShortestPath(start, destination);
+        Console.WriteLine(shortestPath);
+        string[] shortestPathArray = shortestPath.Split(',');
+        string currentLine = "";
+        string previousLine = "";
+        for(int i = 0; i < shortestPathArray.Length - 1; i++){
+            previousLine = currentLine;
+            currentLine = GetConnection(shortestPathArray[i], shortestPathArray[i + 1]);
+            if(previousLine != currentLine){
+                shortestPathArray[i] += ", Line: " + currentLine;
+            }
+            Console.WriteLine(shortestPathArray[i]);
+        }
+        Console.WriteLine(shortestPathArray[shortestPathArray.Length - 1]);
     }
     private void Visit(string node){ // visit one station, calculate the shortest distance from the start
         int nodeIndex = GetNodeIndex(node);
         visited[nodeIndex] = true; // mark this station as visited
         for(int i = 0; i < stations.Count; i++){ 
-            bool connected = GetConnection(stations[i], stations[nodeIndex]);
-            if(!visited[i] && connected){
+            string connected = GetConnection(stations[i], stations[nodeIndex]);
+            if(!visited[i] && connected != ""){
                 if(stationCountFromStart[nodeIndex] + 1 < stationCountFromStart[i]){
                     // if the route via the current station is less than the current root from the start, change the root to go via the current node
                     stationCountFromStart[i] = stationCountFromStart[nodeIndex] + 1;
@@ -131,21 +150,12 @@ class TubeMap { // adjacency list graph
             }
         }
     }
-    private string currentLine = "";
-    private string DetermineShortestPath(string start, string destination){
-        string previousStationName = previousStation[GetNodeIndex(destination)];
+    private string DetermineShortestPath(string start, string destination) {
         if(start == destination){
             return destination;
         }
-        foreach(KeyValuePair<string, List<string>> kvp in LinesAndStations){
-            List<string> line = kvp.Value;
-            for(int i = 1; i < line.Count; i++){
-                if(line[i] == destination && line[i-1] == previousStationName){
-                    currentLine = kvp.Key;
-                }
-            }
-        }
-        return DetermineShortestPath(start, previousStationName) + " " + currentLine + "\n" + destination;
+        string previousStationName = previousStation[GetNodeIndex(destination)];
+        return DetermineShortestPath(start, previousStationName) + "," + destination;
     }
     // goes to the destination then works backwards
 }
@@ -156,7 +166,6 @@ class Program{
         string startNode = Console.ReadLine();
         Console.WriteLine("What is the end node?");
         string endNode = Console.ReadLine();
-
         tubeMap.Dijkstra(startNode, endNode);
     }
 }
