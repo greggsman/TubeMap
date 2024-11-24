@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tube_Planner")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a603447bbef2678481a74934a4939fad39bfa3d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e67f42bf83b1d2cc1854e5834641b2bbebd50d12")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tube_Planner")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tube_Planner")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

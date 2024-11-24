@@ -122,7 +122,7 @@ class TubeMap { // adjacency list graph
             nodeToVisit = stations[shortestDistanceIndex];
         }
         string shortestPath = DetermineShortestPath(start, destination);
-        Console.WriteLine(shortestPath);
+        Console.WriteLine();
         string[] shortestPathArray = shortestPath.Split(',');
         string currentLine = "";
         string previousLine = "";
@@ -162,10 +162,18 @@ class TubeMap { // adjacency list graph
 class Program{
     static void Main(string[] args){
         TubeMap tubeMap = new TubeMap();
-        Console.WriteLine("What is the start node?");
-        string startNode = Console.ReadLine();
-        Console.WriteLine("What is the end node?");
-        string endNode = Console.ReadLine();
-        tubeMap.Dijkstra(startNode, endNode);
+        bool loop = true;
+        while(loop){
+            Console.WriteLine("What station are you leaving from?");
+            string startNode = Console.ReadLine();
+            Console.WriteLine("What is your destination?");
+            string endNode = Console.ReadLine();
+            tubeMap.Dijkstra(startNode, endNode);
+            Console.WriteLine("Enter another destination? (y/n)");
+            string input = Console.ReadLine();
+            if(!(input.ToUpper() == "Y")){
+                loop = false;
+            }
+        }
     }
 }
