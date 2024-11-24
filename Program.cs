@@ -45,7 +45,7 @@ class TubeMap { // adjacency list graph
         }
         return false;
     }
-    private int FindIndexOfStation(string station){
+    private int GetNodeIndex(string station){
         for(int i = 0 ; i < stations.Count; i++){
             if(stations[i] == station){
                 return i;
@@ -55,8 +55,8 @@ class TubeMap { // adjacency list graph
     }
     private void SetConnection(string station1, string station2){
         try{
-            int station1Index = FindIndexOfStation(station1);
-            int station2Index = FindIndexOfStation(station2);
+            int station1Index = GetNodeIndex(station1);
+            int station2Index = GetNodeIndex(station2);
             adjacencyMatrix[station1Index, station2Index] = true;
             adjacencyMatrix[station2Index, station1Index] = true;
         }
@@ -66,15 +66,97 @@ class TubeMap { // adjacency list graph
     }
     public bool GetConnection(string station1, string station2){
         try{
-            return adjacencyMatrix[FindIndexOfStation(station1), FindIndexOfStation(station2)];
+            return adjacencyMatrix[GetNodeIndex(station1), GetNodeIndex(station2)];
         }
         catch{
             return false;
         }
     }
+
+    private bool[] visited;
+    private int[] stationCountFromStart;
+    private string[] previousStation;
+    public void Dijkstra(string start, string destination){
+        if(GetNodeIndex(start) == -1 || GetNodeIndex(destination) == -1){
+            Console.WriteLine("These nodes aren't on the graph");
+            return;
+        }
+        // define visited, distance from start and previous vertex arrays
+        visited = new bool[stations.Count];
+        stationCountFromStart = new int[stations.Count];
+        previousStation = new string[stations.Count];
+        // populate arrays
+        for(int i = 0; i < stations.Count; i++){
+            visited[i] = false;
+            if(stations[i] == start){
+                stationCountFromStart[i] = 0;
+            }
+            else{
+                stationCountFromStart[i] = int.MaxValue; // equivalent to infinity in this case
+            }
+            previousStation[i] = "";
+        }
+        int destinationIndex = GetNodeIndex(destination);
+        string nodeToVisit = start;
+        // fill the arrays with shortest paths and 
+        while(!visited[destinationIndex]){
+            Visit(nodeToVisit); 
+            int shortestDistanceIndex = 0;
+            int currentSmallestDistance = int.MaxValue;
+            for(int i = 0; i < stations.Count; i++){
+                if(stationCountFromStart[i] > 0){
+                    if(stationCountFromStart[i] > 0){
+                        if(stationCountFromStart[i] < currentSmallestDistance && !visited[i]){
+                            currentSmallestDistance = stationCountFromStart[i];
+                            shortestDistanceIndex = i;
+                        }
+                    }
+                }
+            }
+            nodeToVisit = stations[shortestDistanceIndex];
+        }
+        Console.WriteLine("To get from {0} to {1}:\n{2}", start, destination, DetermineShortestPath(start, destination));
+    }
+    private void Visit(string node){ // visit one station, calculate the shortest distance from the start
+        int nodeIndex = GetNodeIndex(node);
+        visited[nodeIndex] = true; // mark this station as visited
+        for(int i = 0; i < stations.Count; i++){ 
+            bool connected = GetConnection(stations[i], stations[nodeIndex]);
+            if(!visited[i] && connected){
+                if(stationCountFromStart[nodeIndex] + 1 < stationCountFromStart[i]){
+                    // if the route via the current station is less than the current root from the start, change the root to go via the current node
+                    stationCountFromStart[i] = stationCountFromStart[nodeIndex] + 1;
+                    previousStation[i] = node;
+                }
+            }
+        }
+    }
+    private string currentLine = "";
+    private string DetermineShortestPath(string start, string destination){
+        string previousStationName = previousStation[GetNodeIndex(destination)];
+        if(start == destination){
+            return destination;
+        }
+        foreach(KeyValuePair<string, List<string>> kvp in LinesAndStations){
+            List<string> line = kvp.Value;
+            for(int i = 1; i < line.Count; i++){
+                if(line[i] == destination && line[i-1] == previousStationName){
+                    currentLine = kvp.Key;
+                }
+            }
+        }
+        return DetermineShortestPath(start, previousStationName) + " " + currentLine + "\n" + destination;
+    }
+    // goes to the destination then works backwards
 }
 class Program{
     static void Main(string[] args){
         TubeMap tubeMap = new TubeMap();
+        Console.WriteLine("What is the start node?");
+        string startNode = Console.ReadLine();
+        Console.WriteLine("What is the end node?");
+        string endNode = Console.ReadLine();
+
+        tubeMap.Dijkstra(startNode, endNode);
     }
 }
